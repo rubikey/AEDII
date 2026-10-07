@@ -97,45 +97,60 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public boolean hasLeftChild() {
-        if (isEmpty()) {
-            return false;
-        }
-        return true;
+        return !isEmpty() && rootNode.hasLeftNode();
     }
 
     @Override
     public BinaryTree<T> getLeftChild() throws EmptyTreeException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        return new LinkedBinaryTree<>(rootNode.getLeftNode());
     }
 
     @Override
     public void setLeftChild(BinaryTree<T> leftChild) throws EmptyTreeException, NullPointerException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        rootNode.setLeftNode(buildNodeFromTree(requireNonNull(leftChild)));
     }
 
     @Override
     public void removeLeftChild() throws EmptyTreeException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        rootNode.setLeftNode(null);
     }
 
     @Override
     public boolean hasRightChild() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return !isEmpty() && rootNode.hasRightNode();
     }
 
     @Override
     public BinaryTree<T> getRightChild() throws EmptyTreeException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        return new LinkedBinaryTree<>(rootNode.getRightNode());
     }
 
     @Override
     public void setRightChild(BinaryTree<T> rightChild) throws EmptyTreeException, NullPointerException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        rootNode.setRightNode(buildNodeFromTree(requireNonNull(rightChild)));
     }
 
     @Override
     public void removeRightChild() throws EmptyTreeException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (isEmpty()) {
+            throw new EmptyTreeException("Empty tree");
+        }
+        rootNode.setRightNode(null);
     }
 
     @Override

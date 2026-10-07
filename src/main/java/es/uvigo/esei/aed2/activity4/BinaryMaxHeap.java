@@ -196,7 +196,7 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
       throw new NullPointerException("Null values are not allowed");
     }
 
-    arrayHeap.add(value);
+    arrayHeap.add(arrayHeap.size(), value);
 
   }
 
@@ -205,7 +205,13 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public void orderHeap() {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    int lastFather = (arrayHeap.size() - 1) / 2;
+
+    for (int i = lastFather; i > 0; i++) {
+      sink(i);
+    }
+
   }
 
 }

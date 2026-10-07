@@ -34,23 +34,108 @@ import java.util.List;
 public class Activity3 {
   // exercise a)
   public static <T> T getParent(BinaryTree<T> tree, T value) {
-    // TODO: Implement this method
+
+    if (tree.isEmpty()) {
+      return null;
+    }
+    if (value.equals(tree.getRootValue())) {
+      return null;
+    }
+
+    if (tree.hasLeftChild()) {
+      if (tree.getLeftChild().getRootValue().equals(value)) {
+        return tree.getRootValue();
+      }
+    }
+
+    if (tree.hasRightChild()) {
+      if (tree.getRightChild().getRootValue().equals(value)) {
+        return tree.getRootValue();
+      }
+    }
+
+    if (tree.hasLeftChild()) {
+      T result = getParent(tree.getLeftChild(), value);
+
+      if (result != null) {
+        return result;
+      }
+    }
+
+    if (tree.hasRightChild()) {
+      T result = getParent(tree.getRightChild(), value);
+
+      if (result != null) {
+        return result;
+      }
+
+    }
+
     return null;
   }
 
   // exercise b)
   public static <T> void printAllValues(BinaryTree<T> tree) {
-    // TODO: Implement this method
+    if (tree.isEmpty()) {
+      return;
+    }
+
+    if (tree.hasLeftChild()) {
+      printAllValues(tree.getLeftChild());
+    }
+
+    System.out.println(tree.getRootValue());
+
+    if (tree.hasRightChild()) {
+      printAllValues(tree.getRightChild());
+    }
   }
 
   // exercise c)
-  public static List<Integer> listEvenValues (BinaryTree<Integer> tree){
-    // TODO: Implement this method
-    return null;
+  public static List<Integer> listEvenValues(BinaryTree<Integer> tree) {
+
+    if (tree.isEmpty()) {
+      return new LinkedList<>();
+    }
+
+    List<Integer> list = new LinkedList<>();
+
+    int value = tree.getRootValue();
+
+    if (value % 2 == 0) {
+      list.add(value);
+    }
+
+    if (tree.hasLeftChild()) {
+      List<Integer> izq = listEvenValues(tree.getLeftChild());
+      list.addAll(izq);
+    }
+
+    if (tree.hasRightChild()) {
+      List<Integer> der = listEvenValues(tree.getRightChild());
+      list.addAll(der);
+    }
+    return list;
   }
 
   // exercise d)
-  public static void printValuesHigherThan30 (BinaryTree<Integer> tree){
-     // TODO: Implement this method
+  public static void printValuesHigherThan30(BinaryTree<Integer> tree) {
+
+    if (tree.isEmpty()) {
+      return;
+    }
+
+    if (tree.hasLeftChild()) {
+      printValuesHigherThan30(tree.getLeftChild());
+    }
+
+    if (tree.hasRightChild()) {
+      printValuesHigherThan30(tree.getRightChild());
+    }
+
+    if (tree.getRootValue() > 30) {
+      System.out.println(tree.getRootValue());
+    }
+
   }
 }
