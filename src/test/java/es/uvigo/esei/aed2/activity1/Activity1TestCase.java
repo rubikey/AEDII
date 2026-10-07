@@ -29,8 +29,10 @@ package es.uvigo.esei.aed2.activity1;
 
 import java.util.Arrays;
 import java.util.Stack;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class Activity1TestCase {
 

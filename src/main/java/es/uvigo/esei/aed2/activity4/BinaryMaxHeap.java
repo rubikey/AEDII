@@ -43,11 +43,11 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    * Comprueba si el heap está vacío.
    *
    * @return <code>true</code> cuando el heap está vacío y <code>false</code> en
-   * caso contrario.
+   *         caso contrario.
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return arrayHeap.size() == 1;
   }
 
   /**
@@ -58,7 +58,11 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public T getMaxValue() throws HeapEmptyException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (arrayHeap.isEmpty()) {
+      throw new HeapEmptyException("Empty Heap");
+    }
+
+    return arrayHeap.get(1);
   }
 
   /**
@@ -68,8 +72,28 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    * @throws HeapEmptyException cuando el heap está vacío.
    */
   @Override
+
   public T removeMaxValue() throws HeapEmptyException {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (isEmpty()) {
+      throw new HeapEmptyException("Empty Heap");
+    }
+
+    T max = getMaxValue();
+
+    // solo hay un elemento real
+    if (arrayHeap.size() == 2) {
+      arrayHeap.remove(1);
+      return max;
+    }
+
+    T last = arrayHeap.remove(arrayHeap.size() - 1); // último elemento
+
+    arrayHeap.set(1, last);
+
+    sink(1);
+
+    return max;
   }
 
   /**
@@ -79,7 +103,38 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    * @param hollow la posición del elemento a mover.
    */
   private void sink(int hollow) {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    int currentPos = hollow;
+
+    while (true) {
+      int left = currentPos * 2;
+      int right = currentPos * 2 + 1;
+
+      if (left >= arrayHeap.size()) { // no tiene hijos que comprobar
+        break;
+      }
+
+      int biggerChild = left;
+
+      if (right < arrayHeap.size()) {
+        if (arrayHeap.get(right).compareTo(arrayHeap.get(left)) > 0) {
+          biggerChild = right;
+        }
+      }
+
+      if (arrayHeap.get(currentPos).compareTo(arrayHeap.get(biggerChild)) >= 0) {
+
+        break;
+      }
+
+      T temp = arrayHeap.get(currentPos);
+      arrayHeap.set(currentPos, arrayHeap.get(biggerChild));
+      arrayHeap.set(biggerChild, temp);
+
+      // actualizamos currentPos
+      currentPos = biggerChild;
+
+    }
   }
 
   /**
@@ -90,7 +145,32 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public void add(T value) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (value == null) {
+      throw new NullPointerException("Null Values are not allowed");
+    }
+
+    if (arrayHeap.isEmpty()) {
+      arrayHeap.set(1, value);
+    }
+
+    arrayHeap.add(value);
+
+    int currentPos = arrayHeap.size() - 1;
+
+    int padre = currentPos / 2;
+
+    while (currentPos > 1 && value.compareTo(arrayHeap.get(currentPos / 2)) > 0) {
+
+      T temp = arrayHeap.get(padre);
+      arrayHeap.set(padre, value);
+      arrayHeap.set(currentPos, temp);
+      currentPos = currentPos / 2;
+
+      padre = currentPos / 2;
+
+    }
+
   }
 
   /**
@@ -98,7 +178,9 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    arrayHeap.clear();
+    arrayHeap.add(0, null);
   }
 
   /**
@@ -109,7 +191,13 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public void insert(T value) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (value == null) {
+      throw new NullPointerException("Null values are not allowed");
+    }
+
+    arrayHeap.add(value);
+
   }
 
   /**

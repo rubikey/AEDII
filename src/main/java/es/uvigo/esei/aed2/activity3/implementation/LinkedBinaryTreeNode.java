@@ -26,58 +26,65 @@ package es.uvigo.esei.aed2.activity3.implementation;
  * THE SOFTWARE.
  * #L%
  */
-
 public class LinkedBinaryTreeNode<T> {
 
-  private T value;
-  private LinkedBinaryTreeNode<T> leftChildNode;
-  private LinkedBinaryTreeNode<T> rightChildNode;
+    private T value;
+    private LinkedBinaryTreeNode<T> leftChildNode;
+    private LinkedBinaryTreeNode<T> rightChildNode;
 
-  public LinkedBinaryTreeNode() {
-    
-  }
+    // crea árbol vacío, invocamos al segundo constructor
+    public LinkedBinaryTreeNode() {
+        this(null);
+    }
 
-  public LinkedBinaryTreeNode(T value) {
-    
-  }
+    // constructor para crear árbol, con raiz pero hijos null
+    // invocamos al constructor de abajo
+    public LinkedBinaryTreeNode(T value) {
+        this(value, null, null);
+    }
 
-  public LinkedBinaryTreeNode(
-    T value,
-    LinkedBinaryTreeNode<T> leftChild,
-    LinkedBinaryTreeNode<T> rightChild
-  ) {
-    
-  }
+    // constructor para crear arbol, con raiz, e hijos
+    public LinkedBinaryTreeNode(
+            T value,
+            LinkedBinaryTreeNode<T> leftChild,
+            LinkedBinaryTreeNode<T> rightChild
+    ) {
 
-  public T getValue() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+        this.value = value;
+        this.leftChildNode = leftChild;
+        this.rightChildNode = rightChild;
 
-  public void setValue(T value) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    }
 
-  public boolean hasLeftNode() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public T getValue() {
+        return this.value;
+    }
 
-  public LinkedBinaryTreeNode<T> getLeftNode() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public void setValue(T value) {
+        this.value = value;
+    }
 
-  public void setLeftNode(LinkedBinaryTreeNode<T> leftChildNode) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public boolean hasLeftNode() {
+        return leftChildNode != null;
+    }
 
-  public boolean hasRightNode() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public LinkedBinaryTreeNode<T> getLeftNode() {
+        return leftChildNode;
+    }
 
-  public LinkedBinaryTreeNode<T> getRightNode() {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public void setLeftNode(LinkedBinaryTreeNode<T> leftChildNode) {
+        this.leftChildNode = leftChildNode;
+    }
 
-  public void setRightNode(LinkedBinaryTreeNode<T> rightChildNode) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    public boolean hasRightNode() {
+        return rightChildNode != null;
+    }
+
+    public LinkedBinaryTreeNode<T> getRightNode() {
+        return rightChildNode;
+    }
+
+    public void setRightNode(LinkedBinaryTreeNode<T> rightChildNode) {
+        this.rightChildNode = rightChildNode;
+    }
 }
