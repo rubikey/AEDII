@@ -73,6 +73,9 @@ public interface MaxHeap<T extends Comparable<T>> {
    * @throws NullPointerException si el valor es <code>null</code>
    */
   public void insert(T value) throws NullPointerException;
+
+  
+
   
   /**
    * Restablece el orden en el montículo binario

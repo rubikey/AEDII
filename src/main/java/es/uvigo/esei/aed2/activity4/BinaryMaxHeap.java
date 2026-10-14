@@ -58,7 +58,7 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   @Override
   public T getMaxValue() throws HeapEmptyException {
-    if (arrayHeap.isEmpty()) {
+    if (isEmpty()) {
       throw new HeapEmptyException("Empty Heap");
     }
 
@@ -103,6 +103,34 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    * @param hollow la posición del elemento a mover.
    */
   private void sink(int hollow) {
+
+    /*FLORO
+     * 
+     * int hijo = hollow * 2;
+     * T value = arrayHeap.get(hollow);
+     * 
+     * boolean end = false;
+     * 
+     * while(hijo <= arrayHeap.size()-1 && !end){
+      * if(hijo < arrayHeap.size()-1 &&
+        * arrayHeap.get(hijo+1).compareTo(arrayHeap.get(hijo))>0){
+        * hijo++;
+      * }
+      * 
+      * if(arrayHeap.get(hijo).compareTo(value) > 0){
+      * 
+        * arrayHeap.set(hollow, arrayHeap.get(hijo));
+        * arrayHeap.set(hijo, value);
+        * hijo = hollow/2;
+      * 
+      * }else{
+      *   end = true;
+      * }
+     * 
+     * 
+     * }
+     * 
+     */
 
     int currentPos = hollow;
 
@@ -196,7 +224,7 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
       throw new NullPointerException("Null values are not allowed");
     }
 
-    arrayHeap.add(arrayHeap.size(), value);
+    arrayHeap.add(value);
 
   }
 
@@ -208,7 +236,7 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
 
     int lastFather = (arrayHeap.size() - 1) / 2;
 
-    for (int i = lastFather; i > 0; i++) {
+    for (int i = lastFather; i > 0; i--) {
       sink(i);
     }
 
