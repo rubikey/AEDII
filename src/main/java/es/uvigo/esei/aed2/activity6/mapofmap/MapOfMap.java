@@ -1,6 +1,5 @@
 package es.uvigo.esei.aed2.activity6.mapofmap;
 
-
 /*-
  * #%L
  * AEDII - Activities
@@ -44,77 +43,252 @@ public class MapOfMap<T, E> implements Graph<T, E> {
   private final Map<Vertex<T>, Map<Vertex<T>, E>> mapOfVertices;
 
   public MapOfMap() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    mapOfVertices = new HashMap<>();
   }
-  
+
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return mapOfVertices.size() == 0;
   }
 
   @Override
   public int numberOfVertices() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return this.mapOfVertices.size();
+
   }
 
   @Override
   public boolean containsVertex(Vertex<T> vertex) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (vertex == null) {
+      return false;
+    }
+
+    for (Vertex<T> v : mapOfVertices.getKeys()) {
+      if (v.equals(vertex)) {
+        return true;
+      }
+
+    }
+
+    return false;
+
   }
 
   @Override
   public boolean containsEdge(Vertex<T> source, Vertex<T> target, E label) {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (source == null || target == null) {
+      return false;
+
+    }
+
+    // mapa de adyacentes de Source
+    Map<Vertex<T>, E> adjacentsMap = mapOfVertices.get(source);
+
+    if (adjacentsMap == null) {
+      return false;
+    }
+
+    if (adjacentsMap == null) {
+      return false;
+    }
+    // recorremos los vértices del mapa, (las claves), hasta encontrar el vértice
+    // target
+    for (Vertex<T> v : adjacentsMap.getKeys()) {
+      if (v.equals(target)) {
+
+        // si encontramos target, sacamos su label
+        E lab = adjacentsMap.get(target);
+
+        // si es igual a la label que buscamos, return true
+        if (Objects.equals(lab, label)) {
+          return true;
+        }
+
+      }
+    }
+
+    return false;
+
   }
 
   @Override
   public Set<Vertex<T>> getVertices() {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    Set<Vertex<T>> vertices = new HashSet<>();
+
+    for (Vertex<T> vertex : mapOfVertices.getKeys()) {
+      vertices.add(vertex);
+    }
+
+    return vertices;
+
   }
 
   @Override
   public Set<Edge<T, E>> getEdges() {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    Set<Edge<T, E>> edgeSet = new HashSet<>();
+
+    for (Vertex<T> source : mapOfVertices.getKeys()) {
+      Map<Vertex<T>, E> adjacencyMap = mapOfVertices.get(source);
+
+      for (Vertex<T> target : adjacencyMap.getKeys()) {
+        E lab = adjacencyMap.get(target);
+        Edge<T, E> edge = new Edge<>(source, target, lab);
+
+        edgeSet.add(edge);
+      }
+
+    }
+
+    return edgeSet;
+
   }
 
   @Override
   public Set<Vertex<T>> getAdjacentsVertex(Vertex<T> vertex) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (vertex == null)
+      throw new NullPointerException("Null Vertex");
+
+    Set<Vertex<T>> adjacentsSet = new HashSet<>();
+
+    for (Vertex<T> source : mapOfVertices.getKeys()) {
+      if (source.equals(vertex)) {
+        Map<Vertex<T>, E> adjacencyMap = mapOfVertices.get(source);
+
+        for (Vertex<T> adjacent : adjacencyMap.getKeys()) {
+          adjacentsSet.add(adjacent);
+        }
+
+      }
+
+    }
+
+    return adjacentsSet;
+
   }
 
   @Override
   public boolean addVertex(Vertex<T> vertex) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    if (vertex == null)
+      throw new NullPointerException("Null Vertex");
+
+    Set<Vertex<T>> vertices = mapOfVertices.getKeys();
+
+    for (Vertex<T> v : vertices) {
+      if (v.equals(vertex)) {
+        return false;
+      }
+
+    }
+
+    mapOfVertices.add(vertex, new HashMap<>());
+    return true;
   }
 
   @Override
-  public boolean addEdge(Vertex<T> source, Vertex<T> target, E label) throws NullPointerException, IllegalArgumentException{
-    throw new UnsupportedOperationException("Not supported yet.");
+  public boolean addEdge(Vertex<T> source, Vertex<T> target, E label)
+      throws NullPointerException, IllegalArgumentException {
+
+    if (source == null || target == null) {
+      throw new NullPointerException("Null values are not allowed");
+    }
+
+    if (!mapOfVertices.getKeys().contains(source) || !mapOfVertices.getKeys().contains(target))
+      throw new IllegalArgumentException();
+
+    Map<Vertex<T>, E> adjMap = mapOfVertices.get(source);
+
+    for (Vertex<T> v : adjMap.getKeys()) {
+      if (v.equals(target)) {
+        return false;
+      }
+    }
+
+    adjMap.add(target, label);
+
+    return true;
+
   }
 
   @Override
   public boolean removeVertex(Vertex<T> vertex) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (vertex == null)
+      throw new NullPointerException();
+
+    if (!mapOfVertices.getKeys().contains(vertex)) {
+      return false;
+    }
+
+    for (Vertex<T> v : mapOfVertices.getKeys()) {
+      Map<Vertex<T>, E> adjMap = mapOfVertices.get(v);
+
+      adjMap.remove(vertex);
+    }
+
+    mapOfVertices.remove(vertex);
+
+    return true;
+
   }
 
   @Override
   public boolean removeEdge(Vertex<T> source, Vertex<T> target, E label) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-  
-  @Override
-  public void clear(){
-   throw new UnsupportedOperationException("Not supported yet.");  
+    if (source == null || target == null) {
+      throw new NullPointerException("Null values are not allowed");
+    }
+
+    Map<Vertex<T>, E> adjMap = mapOfVertices.get(source);
+
+    if (adjMap == null) {
+      return false;
+    }
+    
+    if (adjMap != null && adjMap.getKeys().contains(target)) {
+
+      if (Objects.equals(adjMap.get(target), label)) {
+        adjMap.remove(target);
+        return true;
+      }
+
+    }
+
+    return false;
   }
 
   @Override
-  public void forEachVertex(Consumer<Vertex<T>> action){
-    throw new UnsupportedOperationException("Not supported yet.");
+  public void clear() {
+    mapOfVertices.clear();
   }
 
   @Override
-  public void forEachEdge(Consumer<Edge<T, E>> action){
-    throw new UnsupportedOperationException("Not supported yet.");
+  public void forEachVertex(Consumer<Vertex<T>> action) {
+
+    for (Vertex<T> v : mapOfVertices.getKeys()) {
+      action.accept(v);
+
+    }
+
+  }
+
+  @Override
+  public void forEachEdge(Consumer<Edge<T, E>> action) {
+
+    for (Vertex<T> v : mapOfVertices.getKeys()) {
+      Map<Vertex<T>, E> adjMap = mapOfVertices.get(v);
+
+      for (Vertex<T> target : adjMap.getKeys()) {
+
+        E label = adjMap.get(target);
+
+        Edge<T, E> edge = new Edge<>(v, target, label);
+        action.accept(edge);
+
+      }
+    }
   }
 
 }

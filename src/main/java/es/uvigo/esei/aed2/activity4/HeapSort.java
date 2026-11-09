@@ -1,5 +1,7 @@
 package es.uvigo.esei.aed2.activity4;
 
+import java.util.ArrayList;
+
 /*-
  * #%L
  * AEDII - Activities
@@ -33,6 +35,22 @@ public class HeapSort {
    * @param values the array of integers to be sorted.
    */
   public static void heapSort(int[] values) {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    MaxHeap<Integer> heap = new BinaryMaxHeap<>();
+
+    for (int i = 0; i < values.length; i++) {
+
+      heap.insert(values[i]);
+    }
+
+    heap.orderHeap();
+
+    for (int i = 0; i < values.length; i++) {
+      
+        values[i] = heap.removeMaxValue();
+      
+    }
+    
+
   }
 }

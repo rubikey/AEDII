@@ -1,5 +1,7 @@
 package es.uvigo.esei.aed2.activity6.HashMap;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +38,7 @@ import java.util.function.BiConsumer;
 
 import es.uvigo.esei.aed2.map.Map;
 
-public class HashMap<K,V> implements Map<K,V> {
+public class HashMap<K, V> implements Map<K, V> {
   private static final int CAPACITY = 50;
 
   private int size;
@@ -48,51 +50,139 @@ public class HashMap<K,V> implements Map<K,V> {
 
   @SuppressWarnings("unchecked")
   private HashMap(int capacity) throws IllegalArgumentException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (capacity <= 0) {
+      throw new IllegalArgumentException();
+    }
+    this.map = new List[capacity];
+    for (int i = 0; i < capacity; i++) {
+      this.map[i] = new LinkedList<>();
+    }
+
+    this.size = 0;
   }
 
   private int calculateIndex(K key) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return Math.floorMod(key.hashCode(), map.length);
   }
 
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return size;
   }
 
   @Override
   public V get(K key) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (key == null) {
+      return null;
+    }
+
+    int index = calculateIndex(key);
+
+    for (Pair<K, V> par : map[index]) {
+      if (par.getKey().equals(key)) {
+        V value = par.getValue();
+
+        return value;
+      }
+
+    }
+
+    return null;
+
   }
 
   @Override
   public void add(K key, V value) throws NullPointerException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (key == null) {
+      throw new NullPointerException("Null Key");
+    }
+
+    // calcular índice
+    int index = calculateIndex(key);
+
+    // iterar sobre cada par de la lista
+    for (Pair<K, V> par : map[index]) {
+      if (par.getKey().equals(key)) {
+        par.setValue(value);
+        return;
+      }
+
+    }
+
+    this.map[index].add(new Pair<K, V>(key, value));
+    size++;
+
   }
 
   @Override
   public V remove(K key) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (key == null) {
+      return null;
+    }
+
+    int index = calculateIndex(key);
+
+    for (Pair<K, V> par : map[index]) {
+      if (par.getKey().equals(key)) {
+        V value = par.getValue();
+        this.map[index].remove(par);
+        size--;
+        return value;
+      }
+
+    }
+
+    return null;
   }
 
   @Override
   public Set<K> getKeys() {
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    Set<K> claves = new HashSet<>();
+
+    for (List<Pair<K, V>> list : map) {
+      for (Pair<K, V> pair : list) {
+        claves.add(pair.getKey());
+      }
+    }
+
+    return claves;
   }
 
   @Override
   public Iterator<V> getValues() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    List<V> valores = new ArrayList<>();
+
+    for (List<Pair<K, V>> lista : map) {
+      if (lista != null) {
+        for (Pair<K, V> par : lista) {
+          valores.add(par.getValue());
+        }
+      }
+    }
+
+    return valores.iterator();
+    
+    // return new Iterator<V>();
   }
 
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    for (List<Pair<K, V>> lista : map) {
+      if (lista != null) {
+        lista.clear();
+      }
+    }
+    size = 0;
   }
 
   @Override
-  public void forEach(BiConsumer<K, V> action){
-    throw new UnsupportedOperationException("Not supported yet.");
+  public void forEach(BiConsumer<K, V> action) {
+    for (List<Pair<K, V>> lista : this.map) {
+      for (Pair<K, V> par : lista) {
+        action.accept(par.getKey(), par.getValue());
+      }
+    }
   }
 
   private static class Pair<K, V> {
@@ -132,5 +222,5 @@ public class HashMap<K,V> implements Map<K,V> {
       return Objects.hashCode(this.k) ^ Objects.hashCode(this.v);
     }
   }
-  
+
 }

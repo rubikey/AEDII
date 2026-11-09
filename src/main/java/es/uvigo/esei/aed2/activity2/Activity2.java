@@ -28,6 +28,7 @@ package es.uvigo.esei.aed2.activity2;
  */
 import es.uvigo.esei.aed2.tree.binary.BinaryTree;
 import es.uvigo.esei.aed2.tree.binary.LinkedBinaryTree;
+import es.uvigo.esei.aed2.tree.nary.Tree;
 
 public class Activity2 {
 
@@ -143,27 +144,21 @@ public class Activity2 {
         if (preorder.isEmpty() || inorder.isEmpty()) {
             return new LinkedBinaryTree<>();
         }
-        
+
         // valor de la raíz, en preorder es el primero
-        String rootValue = preorder.substring(0,1);
+        String rootValue = preorder.substring(0, 1);
 
         // en que posición está la raíz en inorder
         int rootPosInorder = inorder.indexOf(rootValue);
 
-
         String leftInorder = inorder.substring(0, rootPosInorder); // cadena left en inorder
         String rightInorder = inorder.substring(1 + rootPosInorder); // cadena right en inorder
 
-
-        
         String leftPreorder = preorder.substring(1, 1 + rootPosInorder); // cadena left en preorder
         String rightPreorder = preorder.substring(1 + rootPosInorder);// cadena right en preorder
 
-
-
-        return new LinkedBinaryTree<>(rootValue, rebuild(leftPreorder, leftInorder), rebuild(rightPreorder, rightInorder));
-
-
+        return new LinkedBinaryTree<>(rootValue, rebuild(leftPreorder, leftInorder),
+                rebuild(rightPreorder, rightInorder));
 
     }
 
@@ -171,26 +166,87 @@ public class Activity2 {
     public static <T extends Comparable<T>> boolean isSelectionTree(BinaryTree<T> tree) {
         // TODO: Implementa la comprobación recursiva de si el árbol es un árbol de
         // selección
-        return false;
+        if (tree.isEmpty()) {
+            return true;
+        }
+
+        BinaryTree<T> left = tree.getLeftChild();
+        BinaryTree<T> right = tree.getRightChild();
+
+        if (left.isEmpty() && right.isEmpty()) {
+            return true;
+        }
+
+        if (left.isEmpty() || right.isEmpty()) { // si solo se cumple una
+            return false;
+        }
+
+        T root = tree.getRootValue();
+
+        T min = left.getRootValue();
+
+        if (min.compareTo(right.getRootValue()) >= 0) {
+            min = right.getRootValue();
+        }
+
+        return root.compareTo(min) == 0 && isSelectionTree(left) && isSelectionTree(right);
+
     }
 
     // exercise 8
     public static <T> boolean isPath(BinaryTree<T> tree, String path) {
         // TODO: Implementa la comprobación recursiva de si existe un camino en el árbol
         // que siga la secuencia dada
-        return false;
+        if (tree.isEmpty()) {
+            return false;
+        }
+
+        if (tree.getRootValue().equals(path.substring(0, 1))) {
+            return true;
+        }
+
+        if (path.length() == 0) {
+            return true;
+        }
+
+        String resto = path.substring(1);
+
+        return isPath(tree.getLeftChild(), resto) || isPath(tree.getRightChild(), resto);
+
     }
 
     // exercise 9
     public static <T> BinaryTree<T> copyingToLevel(BinaryTree<T> tree, int level) {
         // TODO: Implementa la copia recursiva del árbol hasta un nivel dado
-        return new LinkedBinaryTree<>();
+        if (tree.isEmpty()) {
+            return new LinkedBinaryTree<>();
+
+        }
+
+        if (level == 0) {
+            return new LinkedBinaryTree<>(tree.getRootValue());
+        }
+
+        BinaryTree<T> left = tree.getLeftChild();
+        BinaryTree<T> right = tree.getRightChild();
+
+        return new LinkedBinaryTree<>(tree.getRootValue(), copyingToLevel(left, level-1), copyingToLevel(right, level-1));
     }
 
     // exercise 10
     public static <T> boolean isLevelK(BinaryTree<T> tree, T elem, int k) {
         // TODO: Implementa la comprobación recursiva de si un elemento está en el nivel
         // k del árbol
-        return false;
+
+        if (tree.isEmpty()) {
+            return false;
+        }
+
+        T root = tree.getRootValue();
+
+        if (k == 0) {
+            return root.equals(elem);
+        }
+        return isLevelK(tree.getLeftChild(), elem, k-1) || isLevelK(tree.getRightChild(), elem, k-1);
     }
 }

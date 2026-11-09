@@ -38,6 +38,7 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TopologicalOrderingTestCase {
 
@@ -74,5 +75,47 @@ public class TopologicalOrderingTestCase {
             is(expResult2),
             is(expResult3)
     ));
+  }
+
+  @Test
+  public void testGetTopologicalOrderDisconnectedGraph() {
+    MapOfMap<String, Integer> graph = new MapOfMap<>();
+    Vertex<String> a = new Vertex<>("a");
+    Vertex<String> b = new Vertex<>("b");
+    Vertex<String> isolated = new Vertex<>("isolated");
+    graph.addVertex(a);
+    graph.addVertex(b);
+    graph.addVertex(isolated);
+    graph.addEdge(a, b, 1);
+
+    List<Vertex<String>> result = getTopologicalOrder(graph);
+
+    assertThat(result.size(), is(3));
+    assertThat(result.containsAll(List.of(a, b, isolated)), is(true));
+    assertThat(result.indexOf(a) < result.indexOf(b), is(true));
+  }
+
+  @Test
+  public void testGetTopologicalOrderCycleWithIsolatedVertex() {
+    MapOfMap<String, Integer> graph = new MapOfMap<>();
+    Vertex<String> a = new Vertex<>("a");
+    Vertex<String> b = new Vertex<>("b");
+    graph.addVertex(a);
+    graph.addVertex(b);
+    graph.addVertex(new Vertex<>("isolated"));
+    graph.addEdge(a, b, 1);
+    graph.addEdge(b, a, 1);
+
+    assertThrows(IllegalArgumentException.class, () -> getTopologicalOrder(graph));
+  }
+
+  @Test
+  public void testGetTopologicalOrderSelfLoop() {
+    MapOfMap<String, Integer> graph = new MapOfMap<>();
+    Vertex<String> a = new Vertex<>("a");
+    graph.addVertex(a);
+    graph.addEdge(a, a, 1);
+
+    assertThrows(IllegalArgumentException.class, () -> getTopologicalOrder(graph));
   }
 }

@@ -27,10 +27,15 @@ package es.uvigo.esei.aed2.activity6.topologicalordering;
  * #L%
  */
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import es.uvigo.esei.aed2.graph.Graph;
 import es.uvigo.esei.aed2.graph.Vertex;
+import es.uvigo.esei.aed2.map.HashMap;
+import es.uvigo.esei.aed2.map.Map;
 
 public class TopologicalOrdering {
   /**
@@ -38,9 +43,55 @@ public class TopologicalOrdering {
    * 
    * @param graph grafo dirigido acíclico.
    * @return lista de vértices en orden topológico.
+   * @throws IllegalArgumentException si el grafo contiene un ciclo.
    */
   public static <T, E> List<Vertex<T>> getTopologicalOrder(Graph<T, E> graph) {
-    // TODO: Implementa el cálculo del orden topológico de un grafo
-    return null;
+
+    List<Vertex<T>> result = new ArrayList<>();
+
+    Map<Vertex<T>, Integer> grados = new HashMap<>();
+
+    for (Vertex<T> vertex : graph.getVertices()) {
+      grados.add(vertex, 0);
+
+    }
+
+    for (Vertex<T> v : graph.getVertices()) {
+      for (Vertex<T> adj : graph.getAdjacentsVertex(v)) {
+        int grado = grados.get(adj);
+        grados.add(adj, grado + 1);
+      }
+    }
+
+    Queue<Vertex<T>> queue = new ArrayDeque<>();
+
+    for (Vertex<T> vertex : grados.getKeys()) {
+      if (grados.get(vertex) == 0) {
+        queue.add(vertex);
+      }
+    }
+
+    while (!queue.isEmpty()) {
+      Vertex<T> del = queue.remove();
+      result.add(del);
+
+      for (Vertex<T> adj : graph.getAdjacentsVertex(del)) {
+        int grade = grados.get(adj) - 1;
+
+        grados.add(adj, grade);
+
+        if (grade == 0) {
+          queue.add(adj);
+        }
+
+      }
+
+    }
+    if (result.size() != graph.numberOfVertices()) {
+      throw new IllegalArgumentException("El grafo contiene un ciclo");
+    }
+
+    return result;
   }
+
 }

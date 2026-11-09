@@ -104,7 +104,8 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
    */
   private void sink(int hollow) {
 
-    /*FLORO
+    /*
+     * FLORO
      * 
      * int hijo = hollow * 2;
      * T value = arrayHeap.get(hollow);
@@ -112,20 +113,20 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
      * boolean end = false;
      * 
      * while(hijo <= arrayHeap.size()-1 && !end){
-      * if(hijo < arrayHeap.size()-1 &&
-        * arrayHeap.get(hijo+1).compareTo(arrayHeap.get(hijo))>0){
-        * hijo++;
-      * }
-      * 
-      * if(arrayHeap.get(hijo).compareTo(value) > 0){
-      * 
-        * arrayHeap.set(hollow, arrayHeap.get(hijo));
-        * arrayHeap.set(hijo, value);
-        * hijo = hollow/2;
-      * 
-      * }else{
-      *   end = true;
-      * }
+     * if(hijo < arrayHeap.size()-1 &&
+     * arrayHeap.get(hijo+1).compareTo(arrayHeap.get(hijo))>0){
+     * hijo++;
+     * }
+     * 
+     * if(arrayHeap.get(hijo).compareTo(value) > 0){
+     * 
+     * arrayHeap.set(hollow, arrayHeap.get(hijo));
+     * arrayHeap.set(hijo, value);
+     * hijo = hollow/2;
+     * 
+     * }else{
+     * end = true;
+     * }
      * 
      * 
      * }
@@ -234,10 +235,12 @@ public class BinaryMaxHeap<T extends Comparable<T>> implements MaxHeap<T> {
   @Override
   public void orderHeap() {
 
-    int lastFather = (arrayHeap.size() - 1) / 2;
+    if (!isEmpty()) {
+      int lastFather = (arrayHeap.size() - 1) / 2;
 
-    for (int i = lastFather; i > 0; i--) {
-      sink(i);
+      for (int i = lastFather; i > 0; i--) {
+        sink(i);
+      }
     }
 
   }
