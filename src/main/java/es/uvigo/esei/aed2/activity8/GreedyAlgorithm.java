@@ -26,11 +26,17 @@ package es.uvigo.esei.aed2.activity8;
  * #L%
  */
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.LinkedList;
 
 import es.uvigo.esei.aed2.graph.Graph;
 import es.uvigo.esei.aed2.graph.Vertex;
+import es.uvigo.esei.aed2.graph.Edge;
+import es.uvigo.esei.aed2.graph.AdjacencyList;
+
+import es.uvigo.esei.aed2.map.HashMap;
 import es.uvigo.esei.aed2.map.Map;
 
 public class GreedyAlgorithm {
@@ -50,7 +56,64 @@ public class GreedyAlgorithm {
   // Exercise 3
   public static <T> Map<Vertex<T>, Integer> dijkstra(Graph<T, Integer> graph, Vertex<T> vertex) {
 
-    return null;
+    final Integer INFINITO = Integer.MAX_VALUE;
+
+    Set<Vertex<T>> porVisitar = new HashSet<>();
+    Map<Vertex<T>, Integer> distancias = new HashMap<>();
+
+    for (Vertex<T> v : graph.getVertices()) {
+      porVisitar.add(v);
+      distancias.add(v, INFINITO);
+
+    }
+
+    // el vértice por el que empezamos debe tener distancia 0
+    distancias.add(vertex, 0);
+
+    while (!porVisitar.isEmpty()) {
+      Vertex<T> vMinimo = minimo(porVisitar, distancias);
+      porVisitar.remove(vMinimo);
+      Integer dist_vMinimo = distancias.get(vMinimo);
+
+      for (Edge<T, Integer> arco : graph.getEdges()) {
+        if (arco.getSource().equals(vMinimo) && porVisitar.contains(arco.getTarget())) {
+
+          Integer dist_arco = arco.getLabel();
+
+          Integer distTotal = dist_arco + dist_vMinimo;
+          if (distTotal < distancias.get(arco.getTarget())) {
+            distancias.add(arco.getTarget(), distTotal);
+          }
+
+        }
+      }
+
+    }
+
+    return distancias;
+
+  }
+
+  // método privado para buscar el vértice con distancia mínima
+
+  private static <T> Vertex<T> minimo(Set<Vertex<T>> porVisitar, Map<Vertex<T>, Integer> distancias) {
+
+    Integer minD = Integer.MAX_VALUE;
+
+    Vertex<T> minv = null;
+
+    for (Vertex<T> vertex : porVisitar) {
+      Integer distancia_v = distancias.get(vertex);
+
+      if (distancia_v < minD) {
+        minD = distancia_v;
+        minv = vertex;
+      }
+
+    }
+
+    return minv;
+
   }
 
   // Exercise 4
@@ -73,8 +136,7 @@ public class GreedyAlgorithm {
 
   // Exercise 7
   public static Map<String, Integer> fillRucksack(
-    int maxVolume, Map<String, Integer> amounts, Map<String, Integer> volumes
-  ) {
+      int maxVolume, Map<String, Integer> amounts, Map<String, Integer> volumes) {
 
     return null;
   }
